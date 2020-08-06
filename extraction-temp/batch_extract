@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#example usage:
+# ./batch_extract "/mnt/c/Users/frankj6/Documents/RPI HEALS/Final/"*.json
+
+for f in "$@"
+do
+  echo "Processing $f"
+  python3 tree_table_extraction.py "$f" -v
+done
