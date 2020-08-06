@@ -16,8 +16,8 @@ from nltk.tokenize import WhitespaceTokenizer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet
 
-from graph_framework import *
-import annotate_text
+from .graph_framework import *
+from . import annotate_text
 
 class Token_Classifier:
     """Contains rules for how to classify (assign feature(s) to) a single token (if at all).

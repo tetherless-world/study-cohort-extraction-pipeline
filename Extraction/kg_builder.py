@@ -13,9 +13,9 @@ import nltk
 from nltk.tokenize import MWETokenizer
 from nltk.tokenize import WhitespaceTokenizer 
      
-from graph_framework import *
-from classifiers import *
-from study_subject_interpreter import *
+from .graph_framework import *
+from .classifiers import *
+from .study_subject_interpreter import *
         
 class KG_Builder:
     """Build a KG by extracting data from tree tables.

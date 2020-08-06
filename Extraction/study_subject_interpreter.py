@@ -4,7 +4,7 @@
 
 Used to perform the recursive assembly within Step 4 of the pipeline (KG assembly)
 """
-from graph_framework import *
+from .graph_framework import *
 
 # This interpreter just tries to match to the study subject template,
 # TODO in future, make more general
