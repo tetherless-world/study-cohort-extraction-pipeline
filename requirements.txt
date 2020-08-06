@@ -1,0 +1,9 @@
+External packages required:
+  - NLTK
+  - RDFLib
+
+In order to map most terms to ontology concepts, the pipeline uses the NCBO Annotator via BioPortal's REST API. 
+To use this feature of the pipeline, you are required to supply a BioPortal REST API key. For instructions on
+how to get a key, follow the instructions here: https://bioportal.bioontology.org/help#Getting_an_API_key
+
+Once you have the API KEY, place it after "NCBO_API_KEY:" in ./extraction/api_keys.json.
