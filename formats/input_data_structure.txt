@@ -1,0 +1,48 @@
+
+The CCS outputs two files, a .JSON and a .CELLS file. Only the .JSON is used by the pipeline at present.
+
+.JSON files:
+
+Has two representations: bounding boxes, in "cells," and spans, in "data."
+
+Structure and notable properties of JSON file:
+  - "tables": Array of all "table" objects, where each table has its own row count and column count. Ordered from top to bottom.
+    - Element of "tables": Object representing a single table
+      - "#-cols": Column count of this table
+      - "#-rows": Row count of this table
+      - "bounding-box": Contains a "max" and "min" array of four ints [x0, y0, x1, y1] representing the pixel coordinates of the table's enclosing bounding box.
+        - "max": Largest extent of this table that does not overlap with other tables (?)
+        - "min": Smallest extent of this table that entirely contains all cells (?)
+      - "cells": Less helpful data structure of text identified and corresponding bounding boxes. Ordered by row (top-to-bottom), then column (left-to-right).
+        - "data": Array of arrays, one per text segment
+          - Element of "data": 6-element array, of [x0, y0, x1, y1, font, text], e.g. [53.870998, 693.871582, 121.753258, 700.587341, "/POKEBE+MinionPro-Bold", "Placebo" ]
+      - "data": 2D array of cells of this table (array of rows)
+        - Element of "data": Array of cells in this row
+         - Element of element of "data": Cell object
+          - "bbox": Array of [x0, y0, x1, y1] for bounding box of this cell. Null if this cell is empty.
+          - "spans": Array with one element, a 2-element array of [row-#, col-#]
+          - "text": Text of this cell, empty string if cell is empty
+          - "type": One of "col_header" or "body."
+          
+Additional root-level properties of JSON file, which are not currently in use:
+  - _name: filename of the extracted file
+  - _type: should be "pdf-document"
+  - file-info: Object containing some additional metadata about the file
+  - page-dimensions: Taken directly from the original JSON, is an array of objects containing page dimensions
+    - Element of page-dimensions: Object with height (px), width (px), and page (page number) properties.
+  - footnotes: Array of cells representing footnotes for this table
+
+
+Common errors:
+  - The same table is split into multiple elements in "tables," or two different tables are combined into one element
+  - Too many columns or rows are identified in one table
+  - Footnotes are categorized as part of a table
+
+
+Visualization: 
+  See input_data_structure.png (created with jsonviewer.stack.hu)
+
+  
+.CELLS files:
+
+Cells node has (x1,y1) and (x2,y2) coordinates. Currently, we do not use nor plan to use these files.

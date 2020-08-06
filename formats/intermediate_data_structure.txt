@@ -1,0 +1,30 @@
+Intermediate Data Structure specification:
+
+The intermediate data structure is created from the extracted pdf JSON files using make_tree_tables from tree_table_extraction.py, and are used to generate a corresponding RDF knowledge graph by kg_builder (after being loaded as a Python dictionary).
+This document describes the format of this file when serialized in JSON. The intermediate data structure is intended to store data in tree tables and be further iterated on by further steps in the process.
+
+
+For format of the JSON directly extracted from PDF tables, see input_data_structure.txt.
+
+Root object:
+  - _version: A string of "x.x.x" format, current version is 0.0.2
+  - _name: Taken directly from the original JSON, filename of the extracted file
+  - _type: Taken directly from the original JSON, should be "pdf-document"
+  - file-info: Taken directly from the original JSON, is an object containing some information about the file
+  - page-dimensions: Taken directly from the original JSON, is an array of objects containing page dimensions
+    - Element of page-dimensions: Object with height (px), width (px), and page (page number) properties.
+  - footnotes: Array of cells representing footnotes for this table
+  - tables: Array of table objects, one for each top-level table that is a child of the Table 1
+
+
+Table object:
+  - fields: An array of cells, representing the names of columns within the table.
+  - records: An array of child table objects with the same number of columns as the parent. Most of these child tables will represent just a single row of the parent, with the values for each column in the "fields" property and an empty array in the "records" property. Some of these child tables may represent nested tables—these will have the header row for the nested table in "fields" and some number of additional children in "records."
+
+
+Cell object:
+  - bbox: The bounding box of this cell's text, an array of 4 elements as per [x0, y0, x1, y1]. Null if the cell is empty.
+  - spans: An array of 2-element arrays, representing the [row number, column number] cell coordinates this cell spans.
+  - text: The raw extracted text of this cell. Empty string if the cell is empty.
+  - table_num: The index of the table within the document
+  - fonts:  An array of [text, font] strings with the font that segments of text were identified to have (e.g., ["Placebo", "/POKEBE+MinionPro-Bold"]). Empty array if the cell is empty.
