@@ -1,0 +1,84 @@
+# exclusions.txt
+# Lines starting with # ignored
+
+# List of words excluded from the final evaluation
+# 'WORD1','WORD2',etc.
+
+
+
+
+# Parts of speech exclusions:
+
+# Articles:
+'A','AN','THE'
+
+# Conjunctions:
+'AFTER','ALTHOUGH','AND','AS','BECAUSE','BEFORE','BUT','EVEN','IF','OR','FOR','NOR','SINCE','THAT','THOUGH','UNLESS','UNTIL','WHAT','WHEN','WHENEVER','WHEREVER','WHETHER','WHILE','YET'
+
+# Prepositions:
+'AMONG','ALL','ANY','BETWEEN','BOTH','BY','FROM','LEAST','OF','ON','WITH','WITHIN','WITHOUT'
+
+# Pronouns:
+'NONE','OTHERS'
+#,'OTHER'
+# ('Other' by itself typically matched to )
+
+
+
+# Exclusions of specific categories of word:
+
+# Words referring to table structure:
+'CATEGORICAL','CHARACTERISTIC','CONTINUOUS','MEASURE','TABLE','VARIATES','VARIABLE','VARIABLES'
+
+# Statistical measures (handled separately)
+'CI','CV','GEOMETRIC','INTERQUARTILE','IQR','LS','MEAN','MEDIAN','N','SD','S','D','E'
+
+
+
+# Exclusions of parsing-related words
+
+# Numerical
+'ONE','TWO'
+
+# Artifacts from table parsing:
+'F_F','F_F_I','F_I','T_H','THORN','U1D6FC'
+'COEGLYPH','CONGLYPH','DIGLYPH','NUMR','GLYPH','MGLYPH','PROGLYPH'
+
+# Non-alphanumeric ('Β','Μ','ΜG','ΜMOL', have beta and mu)
+'M²','Β','Μ','ΜG','ΜMOL','_','훂','훃','훍'
+
+# Multiple words not split apart
+'BODYWEIGHT','73M'
+
+# The following were words split across mulitple tokens:
+
+#com- posite
+'COM','POSITE'
+#diGLYPH<f_f>erence
+'ERENCE'
+# coeGLYPH<f_f_i>cient 
+'CIENT'
+# GLYPH<u1D6FC> -glucosidase inhibitors 
+# 'GLUCOSIDASE'
+# HbA$_{1c}$
+'HBA','A1,'1C'
+# GLYPH<T_h>iazolidinediones 
+'IAZOLIDINEDIONES'
+# proGLYPH<f_i>les
+'LES'
+# myo- cardial
+'MYO','CARDIAL'
+# ConGLYPH<f_i>rmed
+'RMED'
+
+
+
+
+
+
+
+
+
+
+
+
