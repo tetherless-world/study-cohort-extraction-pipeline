@@ -1,0 +1,79 @@
+
+EVALUATION PROCEDURE
+
+1 -- Structure of unique_set.xlsx
+
+  - Rows:
+    - A row lists one matched class per ontology for the text (in "Matched Text") sent to the NCBO Annotator.
+    - If the same ontology returns multiple results for the same matched text, each result is placed on an additional row.
+    - If a class matches only some of the text sent to the NCBO Annotator, only the specific words the class matched are listed.
+    - Rows are ordered first by row order of "Cell Text" within the original table, then by the number of words in "Matched Text" matched, and lastly by the type of match listed in "Match Type."
+  - Columns:
+    - SEQN: The row number from the original full_set.csv
+    - Filename: Name of the PDF Extraction JSON file this table was found in
+    - Cell Text: Text of the row header cell that a concept was extracted from.
+    - Match Type: List of codes that describe the type of match made when the "Matched Text" words were matched to an ontology's class. The codes are:
+      - NCBO-PREF: The matched words are the preferred match listed for the matched class in BioPortal.
+      - NCBO-SYN: The matched words are a synonym listed for the matched class in BioPortal.
+      - WORDNET: Wordnet was used to generate a synonym, lemma, or acronym expansion for the word non in parentheses in "Matched Text." The word in parentheses is the replacement word actually sent to the NCBO Annotator.
+      - CONTEXT[<Text>]: The context integration feature was used to supply <Text>, from a row sub-header, to the NCBO Annotator along with the rest of the words in the cell. All text sent to the annotator is shown in "Matched Text."
+      - NO_MATCH: No text from the row made a match.
+    - Matched Text: Of the form <TEXT> or <TEXT> (<SYNONYM>). <TEXT> is the text from the table that was used to make a match. If present, <SYNONYM> is the WordNet synonym of <TEXT> that was actually supplied to the annotator.
+    - <Ontology>: This row has classes from <Ontology> that matched with "Matched Text." Data is in the form <preferred label of matched class>: <matched class URI>
+  - Colors:
+    - Red: The column is an ontology that was excluded from the final evaluation.
+    - Yellow: The column is an ontology that is considered a "backup" for NCIT in the final evaluation.
+    - Orange: Matched Text cells with synonyms are highlighted in this color to make them distinct.
+  - Pre-processing:
+    - The results data was generated using kg_builder.py for each file in the dataset, and combined into a single spreadsheet.
+    - Context integration: The "CONTEXT" match type was added in a pre-processing step.
+    - Duplicate removal: Only the first unique cell of "Matched Text" (not counting words in parentheses) is kept. If "Matched Text" is duplicated later on, the entire row is removed (unless no text was matched).
+
+2 -- Ground truth annotation procedure
+
+  - Each matched class for the selected ontologies is reviewed, and replaced with one of the following codes:
+    - "y": The class is a correct match.
+    - "n": The class is an incorrect match.
+    - "u": It is unknown whether the class was a correct or incorrect match.
+    - "i": An error earlier in the pipeline prevented annotation for this class.
+    - No code/original text: The match is extraneous.
+    
+  - Determining correctness of matches:
+    - The class matches the concept as intended to be interpreted by the authors.
+      - The class does not have to exactly match to be considered correct. 
+        - EXAMPLE: both "Blood Pressure" and "Blood Pressure Finding" are considered correct matches for "BLOOD PRESSURE."
+      - Due to the subjective nature of determining correctness, each match is evaluated by a minimum of two annotators.
+        - Disagreements between two annotators are floated to an additional annotator with additional background medical knowledge.
+    - After a correct match for "Matched Text" is found, further matches to the same match text, of a different match type, are considered extraneous and ignored.
+      - EXAMPLE: If "STROKE" is matched, then matches for "STROKE (SHOT)" (match type "WORDNET") are ignored until the cell text changes.
+    - In some cases, the original cell text is consists of multiple words or concepts describing a composite concept:
+      - If multiple words are matched in "Matched Text," then additional subsets of those words from the same cell are considered extraneous and ignored.
+        - EXAMPLE: If "BLOOD PRESSURE" is matched, "BLOOD" and "PRESSURE" are ignored.
+      - If some conceptual subset of the original cell text is matched separately, each match is evaluated vased on how well it fits its matched text subset, within the context of the entire cell text.
+        - EXAMPLE: If "PREVIOUS" and "PROCEDURE" were matched text in separate rows, and "PREVIOUS PROCEDURE" was not an earlier match for this ontology, then the matches for "PREVIOUS" and "PROCEDURE" should be evaluated separately.
+        - If only part of the composite concept is matched, the unmatched text will be marked as unmatched (and therefore incorrect) by the evaluation algorithm. 
+          - EXAMPLE: If the cell text is "Microvascular eye disease", and only "EYE DISEASE" is matched text, "EYE DISEASE" is evaluated on its own. "Microvascular" will be counted unmatched by the evaluation algorithm.
+    - Words referring to table structure, such as "Table" or "Characteristic," are considered extraneous and ignored.
+    - Conjunctions, prepositions, pronouns, and articles are considered extraneous and ignored (when not part of a larger match).
+    - In case of ambiguity or uncertainty about a match, "u" is marked such that another annotator will investigate correctness.
+    - In case the annotator sees an irregularity or error that appeared to result from parts of the extraction pipeline not related to concept matching, and this irregularity leads to an incorrect or unmatched term, "i" is marked.
+    
+3 -- Evaluation algorithm
+
+  - Overall coverage is computed as an average of the correctness value of each cell:
+    - For each cell text in the original set (where duplicates have not been removed), the correctness of that cell is the percentage of words (as defined by the Regex tokenizer discussed in Implementation) that have a match
+      - EXAMPLE: "Microvascular eye disease" from the above example is considered 66.7% matched.
+    - Coverage is computed for each ontology based on how many classes from the specific ontology were matched to words in each cell.
+  - Certain words are filtered from cell text during the evaluation:
+    - Conjunctions, prepositions, pronouns, and articles
+      - EXAMPLES: "SINCE", "ON", "NONE", "THE"
+    - Words referring to table structure, such as "Table" or "Characteristic,"
+    - Numbers
+    - Incorrectly parsed or tokenized words or cells
+    
+    
+    
+    
+    
+    
+    
