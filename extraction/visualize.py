@@ -1,13 +1,14 @@
 from .tree_table_extraction import print_tree_tables
-from .graph_framework import Supertype_Constraint, IRI_Node
+from .graph_framework import *
 import csv
+from os import path
 
 stat_measure_constraint = Supertype_Constraint(IRI_Node("sco:StatisticalMeasure", None))
 
 # helper function for setting text on the table object
 # this way, we can see the annotations on parts of the table
 # accept: table object (remember to loop thru and give ALL table objects)
-def set_text(table, indent=0):
+def set_text(table, input_file, indent=0):
     csv_rows = []
     
     for colnum,cell in enumerate(table["fields"]):
@@ -111,16 +112,24 @@ def set_text(table, indent=0):
     return csv_rows
 
 
-def print_visualization(data, input_file):
+def print_visualization(data, input_file, output_dir=None):
+    ''' Print a visualization and a results file for the data.
+    
+        Filepath generated from input_file. 
+        Directory of input_file is used unless output_dir is provided.
+    '''
     
     csv_rows = []
     for t in data["tables"]:
-        csv_rows += set_text(t)
+        csv_rows += set_text(t, input_file)
 
-    print_tree_tables(data, "./out."+input_file[2:30]+".txt")
+    if output_dir is None:
+        output_dir = path.dirname(input_file)
+    viz_fn = output_dir+"/out."+path.basename(input_file)[0:30]+".txt"
+    csv_fn = output_dir+"/results."+path.basename(input_file)[0:30]+".csv"
+        
+    print_tree_tables(data, viz_fn)
 
-
-    csv_fn = './'+"results."+input_file[2:30]+'.csv';
     with open(csv_fn, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 

@@ -27,13 +27,12 @@ class KG_Builder:
     
     # right now ordered as per left-to-right precendece
     # TODO, should be revamped to be made much more powerful + adaptable
-    TokenClassifiers = []
     
     def __init__(self):
         """Initialize the KG builder with initial parameters.
         
         """
-        self.TokenClassifiers += [Free_Value_Token_Classifier(), Concept_Token_Classifier(),NCBO_Token_Classifier()]
+        self.TokenClassifiers = [Free_Value_Token_Classifier(), Concept_Token_Classifier(),NCBO_Token_Classifier()]
         
         #self.row_interpreter = ...doesnt interpret along rows anymore
         
@@ -252,6 +251,7 @@ class KG_Builder:
         # GLYPH<C6> instead of ± (Only seen in one document)
         # GLYPH<shortrightarrow>
         # GLYPH<two.numr> (2 superscript I believe)
+        # HbA$_{1c}$
         
         
         #TODO: Test that this works, make ways to account for other encodings 

@@ -75,6 +75,33 @@ def annotate(text, ontologies):
     sleep(0.08)
     print("REQ: "+text)
     return  get_json(REST_URL + "/annotator?include=prefLabel&text=" + urllib.parse.quote(text) + "&ontologies=" + o_ids)
+       
+def post(url,data):
+    global NCBO_API_KEY
+                          
+    parsed_data = urllib.parse.urlencode(data).encode()
+    req =  urllib.request.Request(url, data=parsed_data) # this will make the method "POST"
+                          
+    opener = urllib.request.build_opener()
+
+    if NCBO_API_KEY is "":
+        NCBO_API_KEY = load_api_key()
+    opener.addheaders = [('Authorization', 'apikey token=' + NCBO_API_KEY),('Content-Type', 'application/json'),('Accept', 'application/json')]
+    return json.loads(opener.open(req).read())
+                          
+def get_semantic_types(results):
+    
+    # build batch request
+    collection = []
+    for r in results:
+        c = {"class":r["annotatedClass"]["@id"], "ontology":r["annotatedClass"]["links"]["ontology"]}
+        collection.append(c)
+    data = {"http://www.w3.org/2002/07/owl#Class": {"collection":collection,"display": "semanticTypes"}}
+                          
+    # use batch endpoint
+    sleep(0.08)
+    print("BATCH REQ")
+    post(REST_URL+"/batch",data)
                           
 def example():
     text_to_annotate = "Melanoma is a malignant tumor of melanocytes which are found predominantly in skin but also in the bowel and the eye."
