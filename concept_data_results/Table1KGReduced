@@ -19,7 +19,7 @@
 
 sco-i:BodyMassIndex
 	a Owl:Class;
-	rdfs:label "Body Mass Index"
+	rdfs:label "Body Mass Index".
 
 sco-i:MetforminStudyArm
 	a  owl:Class, sco:InterventionArm; 
