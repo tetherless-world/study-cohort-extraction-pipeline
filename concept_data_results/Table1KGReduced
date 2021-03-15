@@ -18,7 +18,7 @@
 <http://www.omg.org/techprocess/ab/SpecificationMetadata/> .
 
 sco-i:BodyMassIndex
-	a Owl:Class;
+	a owl:Class;
 	rdfs:label "Body Mass Index".
 
 sco-i:MetforminStudyArm
@@ -30,7 +30,7 @@ sco-i:MetforminStudyArm
 	sio:hasAttribute 
 	[ a sco:PopulationSize; sio:hasValue 859],
 	[ a sio:Age; sio:hasUnit sio:Year;
-	  sio:hasAttribute sco-i:MetforminStudyArm
+	  sio:hasAttribute
 	  [ a sio:Mean; sio:hasValue 56.7],
 	  [a sio:StandardDeviation; sio:hasValue 10.2]           
 	],        
