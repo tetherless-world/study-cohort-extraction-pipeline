@@ -17,10 +17,6 @@
 @prefix sm:   
 <http://www.omg.org/techprocess/ab/SpecificationMetadata/> .
 
-sco-i:BodyMassIndex
-	a owl:Class;
-	rdfs:label "Body Mass Index".
-
 sco-i:MetforminStudyArm
 	a  owl:Class, sco:InterventionArm; 
 	rdfs:subClassOf sio:StudySubject;
@@ -30,14 +26,9 @@ sco-i:MetforminStudyArm
 	sio:hasAttribute 
 	[ a sco:PopulationSize; sio:hasValue 859],
 	[ a sio:Age; sio:hasUnit sio:Year;
-	  sio:hasAttribute
+	  sio:hasAttribute 
 	  [ a sio:Mean; sio:hasValue 56.7],
 	  [a sio:StandardDeviation; sio:hasValue 10.2]           
-	],        
-	[ a sco-i:BodyMassIndex;
-	  sio:hasAttribute 
-	  [ a sio:Mean; sio:hasValue 33.2], 
-	  [a sio:StandardDeviation; sio:hasValue 6.9]
 	].
 
 sco-i:FemaleMetforminStudySubject a owl:Class;
@@ -54,22 +45,6 @@ sco-i:FemaleMetforminStudySubject a owl:Class;
 	[ 
 	    a sio:Percentage;
 	    sio:hasValue 66.8;
-	    sio:inRelationTo sco-i:MetforminStudyArm
-	] .
-
-sco-i:DiabetesStudySubject a owl:Class;
-	rdfs:subClassOf sco-i:MetforminStudyArm;
-	rdfs:subClassOf 
-	[ 
-    	a owl:Restriction; 
-    	owl:onProperty sio:hasAttribute; 
-    	owl:someValuesFrom sco:Diabetes
-    ];
-	sio:hasAttribute  
-	[ 
-	    a sio:Percentage;
-	    sio:hasValue 33.2; 
-	    sio:inRelationTo sco-i:MetforminStudyArm
 	] .
 
 sco-i:VitaminB12DeficiencyStudy
